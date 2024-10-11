@@ -28,6 +28,6 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Validated @RequestBody LoginRequest loginRequest) {
-        return ResponseEntity.ok(new LoginResponse(""));
+        return ResponseEntity.ok(authService.login(loginRequest));
     }
 }

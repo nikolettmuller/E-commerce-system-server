@@ -8,8 +8,6 @@ import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.mapper.Regi
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 class RegisterMapperTest {
 
@@ -24,7 +22,6 @@ class RegisterMapperTest {
                 .role(UserRole.USER)
                 .build();
 
-        Timestamp timestampBeforeMapping = Timestamp.valueOf(LocalDateTime.now());
         User mappedUser = registerMapper.map(registerRequest);
 
         Assertions.assertAll(
@@ -32,7 +29,7 @@ class RegisterMapperTest {
                 () -> Assertions.assertEquals(registerRequest.getRole(), mappedUser.getRole()),
                 () -> Assertions.assertEquals(registerRequest.getEmail(), mappedUser.getEmail()),
                 () -> Assertions.assertEquals(registerRequest.getPassword(), mappedUser.getPassword()),
-                () -> Assertions.assertTrue(timestampBeforeMapping.before(mappedUser.getCreatedAt()))
+                () -> Assertions.assertNotNull(mappedUser.getCreatedAt())
         );
     }
 

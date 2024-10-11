@@ -2,6 +2,8 @@ package eu.muller.nikolett.e_commerce_system.e_commerce_system_server.integratio
 
 
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.controller.AuthController;
+import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.LoginRequest;
+import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.LoginResponse;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.RegisterRequest;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.RegisterResponse;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity.UserRole;
@@ -9,6 +11,7 @@ import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.exception.D
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.platform.commons.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
@@ -78,6 +81,32 @@ class AuthControllerTest {
     @Test
     void nullAttributesRegistrationTest() {
         // TODO
+    }
+
+    @Test
+    void validLoginTest() {
+        RegisterRequest registerRequest = RegisterRequest.builder()
+                .name("Test User")
+                .email("testuser@testuser.com")
+                .password("password123")
+                .role(UserRole.USER)
+                .build();
+
+        authController.register(registerRequest);
+
+        LoginRequest loginRequest = LoginRequest.builder()
+                .email(registerRequest.getEmail())
+                .password("password123")
+                .build();
+
+        ResponseEntity<LoginResponse> response = authController.login(loginRequest);
+
+        assertAll(
+                () -> assertEquals(HttpStatus.OK, response.getStatusCode()),
+                () -> assertNotNull(response.getBody()),
+                () -> assertTrue(StringUtils.isNotBlank(response.getBody().getToken()))
+        );
+
     }
 
 }
