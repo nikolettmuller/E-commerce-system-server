@@ -14,19 +14,14 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column
     private String name;
 
-    @Column
     private String email;
 
-    @Column
     private String password;
 
-    @Column
     private Timestamp createdAt;
 
-    @Column
     @Enumerated(EnumType.STRING)
     private UserRole role;
 }
