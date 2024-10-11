@@ -6,6 +6,7 @@ import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity.User
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.mapper.RegisterMapper;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,14 +17,18 @@ public class AuthServiceImpl implements AuthService {
 
     private final RegisterMapper registerMapper;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Override
     public RegisterResponse register(RegisterRequest register) {
+        hashPassword(register);
+        User mappedUser = registerMapper.map(register);
+        User newUser = userRepository.save(mappedUser);
+        return new RegisterResponse(newUser.getName());
+    }
 
-        User user = registerMapper.map(register);
-        userRepository.save(user);
-
-        RegisterResponse response = new RegisterResponse();
-        response.setName(user.getName());
-        return response;
+    private void hashPassword(RegisterRequest register) {
+        String encodedPassword = passwordEncoder.encode(register.getPassword());
+        register.setPassword(encodedPassword);
     }
 }
