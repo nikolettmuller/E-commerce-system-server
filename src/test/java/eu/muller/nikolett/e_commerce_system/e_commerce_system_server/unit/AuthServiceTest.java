@@ -37,20 +37,19 @@ class AuthServiceTest {
     @Mock
     private AuthenticationManager authenticationManager;
 
+    private static final String USER_NAME = "Test User";
+
+    private static final String USER_EMAIL = "testuser@testuser.com";
+
+    private static final String USER_PASSWORD = "password123";
+
     @Test
     void validRegisterTest() {
-        RegisterRequest registerRequest = RegisterRequest.builder()
-                .name("Test User")
-                .email("testuser@testuser.com")
-                .password("password123")
-                .role(UserRole.USER)
-                .build();
+        RegisterRequest registerRequest =
+                createRegisterRequest(USER_NAME, USER_EMAIL,
+                        USER_PASSWORD, UserRole.USER);
 
-        User mappedUser = new User();
-        mappedUser.setId(1);
-        mappedUser.setName(registerRequest.getName());
-        mappedUser.setRole(registerRequest.getRole());
-        mappedUser.setEmail(registerRequest.getEmail());
+        User mappedUser = createMappedUser(1, registerRequest.getName(), registerRequest.getRole(), registerRequest.getEmail());
 
         doReturn(0L).when(userRepository).countByEmail(registerRequest.getEmail());
         doReturn("encryptedPass").when(passwordEncoder).encode(registerRequest.getPassword());
@@ -59,20 +58,35 @@ class AuthServiceTest {
 
         RegisterResponse registerResponse = authService.register(registerRequest);
 
-        Assertions.assertEquals("Test User", registerResponse.getName());
+        Assertions.assertEquals(USER_NAME, registerResponse.getName());
     }
 
     @Test
     void duplicatedEmailTest() {
-        RegisterRequest registerRequest = RegisterRequest.builder()
-                .name("Test User")
-                .email("testuser@testuser.com")
-                .password("password123")
-                .role(UserRole.USER)
-                .build();
+        RegisterRequest registerRequest =
+                createRegisterRequest(USER_NAME, USER_EMAIL,
+                        USER_PASSWORD, UserRole.USER);
 
         doReturn(1L).when(userRepository).countByEmail(registerRequest.getEmail());
 
         Assertions.assertThrows(DuplicatedEmailException.class, () -> authService.register(registerRequest));
+    }
+
+    private RegisterRequest createRegisterRequest(String name, String email, String password, UserRole role) {
+        return RegisterRequest.builder()
+                .name(name)
+                .email(email)
+                .password(password)
+                .role(role)
+                .build();
+    }
+
+    private User createMappedUser(Integer id, String name, UserRole role, String email) {
+        User mappedUser = new User();
+        mappedUser.setId(id);
+        mappedUser.setName(name);
+        mappedUser.setRole(role);
+        mappedUser.setEmail(email);
+        return mappedUser;
     }
 }

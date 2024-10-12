@@ -29,6 +29,12 @@ class AuthControllerTest {
     @Autowired
     private UserRepository userRepository;
 
+    private static final String USER_NAME = "Test User";
+
+    private static final String USER_EMAIL = "testuser@testuser.com";
+
+    private static final String USER_PASSWORD = "password123";
+
     @BeforeEach
     public void clearRecord() {
         userRepository.deleteAll();
@@ -36,12 +42,9 @@ class AuthControllerTest {
 
     @Test
     void validRegistrationTest() {
-        RegisterRequest registerRequest = RegisterRequest.builder()
-                .name("Test User")
-                .email("testuser@testuser.com")
-                .password("password123")
-                .role(UserRole.USER)
-                .build();
+        RegisterRequest registerRequest =
+                createRegisterRequest(USER_NAME, USER_EMAIL,
+                        USER_PASSWORD, UserRole.USER);
 
         ResponseEntity<RegisterResponse> response = authController.register(registerRequest);
 
@@ -55,21 +58,15 @@ class AuthControllerTest {
 
     @Test
     void notUniqueEmailRegistrationTest() {
-        RegisterRequest registerRequest = RegisterRequest.builder()
-                .name("Test User")
-                .email("testuser@testuser.com")
-                .password("password123")
-                .role(UserRole.USER)
-                .build();
+        RegisterRequest registerRequest =
+                createRegisterRequest(USER_NAME, USER_EMAIL,
+                        USER_PASSWORD, UserRole.USER);
 
         authController.register(registerRequest);
 
-        RegisterRequest registerRequestOther = RegisterRequest.builder()
-                .name("Test Other")
-                .email("testuser@testuser.com")
-                .password("password1234")
-                .role(UserRole.USER)
-                .build();
+        RegisterRequest registerRequestOther = createRegisterRequest("User Name", USER_EMAIL,
+                "pass987", UserRole.USER);
+
 
         assertThrows(DuplicatedEmailException.class, () -> authController.register(registerRequestOther));
     }
@@ -86,19 +83,13 @@ class AuthControllerTest {
 
     @Test
     void validLoginTest() {
-        RegisterRequest registerRequest = RegisterRequest.builder()
-                .name("Test User")
-                .email("testuser@testuser.com")
-                .password("password123")
-                .role(UserRole.USER)
-                .build();
+        RegisterRequest registerRequest =
+                createRegisterRequest(USER_NAME, USER_EMAIL,
+                        USER_PASSWORD, UserRole.USER);
 
         authController.register(registerRequest);
 
-        LoginRequest loginRequest = LoginRequest.builder()
-                .email(registerRequest.getEmail())
-                .password("password123")
-                .build();
+        LoginRequest loginRequest = createLoginRequest(USER_EMAIL, USER_PASSWORD);
 
         ResponseEntity<LoginResponse> response = authController.login(loginRequest);
 
@@ -112,22 +103,32 @@ class AuthControllerTest {
 
     @Test
     void invalidPasswordLoginTest() {
-        RegisterRequest registerRequest = RegisterRequest.builder()
-                .name("Test User")
-                .email("testuser@testuser.com")
-                .password("password123")
-                .role(UserRole.USER)
-                .build();
+        RegisterRequest registerRequest =
+                createRegisterRequest(USER_NAME, USER_EMAIL,
+                        USER_PASSWORD, UserRole.USER);
 
         authController.register(registerRequest);
 
-        LoginRequest loginRequest = LoginRequest.builder()
-                .email(registerRequest.getEmail())
-                .password("password1234")
-                .build();
+        LoginRequest loginRequest = createLoginRequest(USER_EMAIL, "password1234");
 
         assertThrows(BadCredentialsException.class, () -> authController.login(loginRequest));
 
+    }
+
+    private RegisterRequest createRegisterRequest(String name, String email, String password, UserRole role) {
+        return RegisterRequest.builder()
+                .name(name)
+                .email(email)
+                .password(password)
+                .role(role)
+                .build();
+    }
+
+    private LoginRequest createLoginRequest(String email, String password) {
+        return LoginRequest.builder()
+                .email(email)
+                .password(password)
+                .build();
     }
 
 }
