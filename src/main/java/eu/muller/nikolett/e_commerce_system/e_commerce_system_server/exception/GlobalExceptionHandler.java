@@ -11,6 +11,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DuplicatedEmailException.class)
     public ResponseEntity<String> handleDuplicatedEmailException() {
-        return new ResponseEntity<>("The given is email already used", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("The given email is already used", HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<String> handleProductNotFoundException() {
+        return new ResponseEntity<>("Product does not exist", HttpStatus.BAD_REQUEST);
     }
 }

@@ -4,6 +4,7 @@ package eu.muller.nikolett.e_commerce_system.e_commerce_system_server.unit;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.ProductRequest;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.ProductResponse;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity.Product;
+import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.exception.ProductNotFoundException;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.mapper.ProductMapper;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.repository.ProductRepository;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.service.ProductServiceImpl;
@@ -12,14 +13,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ProductServiceTest {
@@ -58,6 +59,64 @@ class ProductServiceTest {
                 () -> assertEquals(PRODUCT_DESC, productResponse.getDescription()),
                 () -> assertEquals(PRODUCT_PRICE, productResponse.getPrice())
         );
+
+    }
+
+    @Test
+    void findProductByValidIdTest() {
+        Optional<Product> product = Optional.of(createProduct(PRODUCT_ID, PRODUCT_NAME, PRODUCT_DESC, PRODUCT_PRICE));
+        ProductResponse response = createProductResponse(PRODUCT_ID, PRODUCT_NAME, PRODUCT_DESC, PRODUCT_PRICE, product.get().getCreatedAt());
+        int id = 1;
+
+        doReturn(product).when(productRepository).findById(id);
+        doReturn(response).when(productMapper).map(product.get());
+
+        ProductResponse productResponse = productService.findProductById(id);
+
+        assertAll(
+                () -> assertEquals(PRODUCT_NAME, productResponse.getName()),
+                () -> assertEquals(PRODUCT_DESC, productResponse.getDescription()),
+                () -> assertEquals(PRODUCT_PRICE, productResponse.getPrice())
+        );
+
+    }
+
+    @Test
+    void findProductByInValidIdTest() {
+        int id = 1;
+        doReturn(Optional.empty()).when(productRepository).findById(id);
+        assertThrows(ProductNotFoundException.class, () -> productService.findProductById(id));
+
+    }
+
+    @Test
+    void modifyProductTest() {
+        ProductRequest request = createProductRequest("modifiedName", PRODUCT_DESC, PRODUCT_PRICE);
+        Product product = createProduct(PRODUCT_ID, "modifiedName", PRODUCT_DESC, PRODUCT_PRICE);
+        ProductResponse response = createProductResponse(PRODUCT_ID, "modifiedName", PRODUCT_DESC, PRODUCT_PRICE, product.getCreatedAt());
+
+        doReturn(product).when(productMapper).map(request);
+        doReturn(response).when(productMapper).map(product);
+        product.setId(PRODUCT_ID);
+        doReturn(product).when(productRepository).save(product);
+
+        ProductResponse productResponse = productService.modifyProduct(PRODUCT_ID, request);
+
+        assertAll(
+                () -> assertEquals("modifiedName", productResponse.getName()),
+                () -> assertEquals(PRODUCT_DESC, productResponse.getDescription()),
+                () -> assertEquals(PRODUCT_PRICE, productResponse.getPrice()),
+                () -> assertEquals(PRODUCT_ID, productResponse.getId())
+        );
+
+    }
+
+    @Test
+    void deleteTest() {
+        int id = 1;
+        doNothing().when(productRepository).deleteById(id);
+        productService.deleteProduct(id);
+        verify(productRepository, times(1)).deleteById(id);
 
     }
 
