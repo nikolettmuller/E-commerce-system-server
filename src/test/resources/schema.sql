@@ -15,3 +15,20 @@ CREATE TABLE PRODUCTS (
     price NUMERIC NOT NULL,
     created_at TIMESTAMP NOT NULL
 );
+
+CREATE TABLE ORDERS (
+    id INT PRIMARY KEY,
+    user_id INT NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE ORDER_ITEMS (
+    id INT PRIMARY KEY,
+    order_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT NOT NULL,
+    price NUMERIC NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+);

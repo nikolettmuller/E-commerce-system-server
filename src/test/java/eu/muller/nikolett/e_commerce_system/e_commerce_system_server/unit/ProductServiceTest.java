@@ -92,13 +92,12 @@ class ProductServiceTest {
     @Test
     void modifyProductTest() {
         ProductRequest request = createProductRequest("modifiedName", PRODUCT_DESC, PRODUCT_PRICE);
-        Product product = createProduct(PRODUCT_ID, "modifiedName", PRODUCT_DESC, PRODUCT_PRICE);
-        ProductResponse response = createProductResponse(PRODUCT_ID, "modifiedName", PRODUCT_DESC, PRODUCT_PRICE, product.getCreatedAt());
+        Optional<Product> product = Optional.of(createProduct(PRODUCT_ID, "modifiedName", PRODUCT_DESC, PRODUCT_PRICE));
+        ProductResponse response = createProductResponse(PRODUCT_ID, "modifiedName", PRODUCT_DESC, PRODUCT_PRICE, product.get().getCreatedAt());
 
-        doReturn(product).when(productMapper).map(request);
-        doReturn(response).when(productMapper).map(product);
-        product.setId(PRODUCT_ID);
-        doReturn(product).when(productRepository).save(product);
+        doReturn(product).when(productRepository).findById(PRODUCT_ID);
+        doReturn(response).when(productMapper).map(product.get());
+        doReturn(product.get()).when(productRepository).save(product.get());
 
         ProductResponse productResponse = productService.modifyProduct(PRODUCT_ID, request);
 

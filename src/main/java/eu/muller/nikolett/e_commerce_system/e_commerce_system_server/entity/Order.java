@@ -1,6 +1,5 @@
 package eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity;
 
-
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -9,21 +8,20 @@ import java.util.Set;
 
 @Data
 @Entity
-@Table(name = "products")
-public class Product {
+@Table(name = "orders")
+public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-    private String name;
-
-    private String description;
-
-    private Integer price;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     private Timestamp createdAt;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OrderItem> orderItems;
+
 }

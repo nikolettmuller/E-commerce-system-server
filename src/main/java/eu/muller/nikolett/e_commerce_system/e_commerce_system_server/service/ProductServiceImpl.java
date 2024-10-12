@@ -43,8 +43,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public ProductResponse modifyProduct(Integer id, ProductRequest productRequest) {
-        Product product = productMapper.map(productRequest);
-        product.setId(id);
+        Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product not found: " + id));
+        updateProduct(product, productRequest);
         return productMapper.map(productRepository.save(product));
     }
 
@@ -52,5 +52,11 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public void deleteProduct(Integer id) {
         productRepository.deleteById(id);
+    }
+
+    private void updateProduct(Product product, ProductRequest productRequest) {
+        product.setPrice(productRequest.getPrice());
+        product.setName(productRequest.getName());
+        product.setDescription(productRequest.getDescription());
     }
 }
