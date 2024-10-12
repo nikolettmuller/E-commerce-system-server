@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -106,6 +107,26 @@ class AuthControllerTest {
                 () -> assertNotNull(response.getBody()),
                 () -> assertTrue(StringUtils.isNotBlank(response.getBody().getToken()))
         );
+
+    }
+
+    @Test
+    void invalidPasswordLoginTest() {
+        RegisterRequest registerRequest = RegisterRequest.builder()
+                .name("Test User")
+                .email("testuser@testuser.com")
+                .password("password123")
+                .role(UserRole.USER)
+                .build();
+
+        authController.register(registerRequest);
+
+        LoginRequest loginRequest = LoginRequest.builder()
+                .email(registerRequest.getEmail())
+                .password("password1234")
+                .build();
+
+        assertThrows(BadCredentialsException.class, () -> authController.login(loginRequest));
 
     }
 

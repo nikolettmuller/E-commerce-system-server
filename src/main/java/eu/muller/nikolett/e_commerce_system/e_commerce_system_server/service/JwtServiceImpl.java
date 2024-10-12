@@ -1,6 +1,7 @@
 package eu.muller.nikolett.e_commerce_system.e_commerce_system_server.service;
 
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.config.JwtServiceProperties;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -28,10 +29,28 @@ public class JwtServiceImpl implements JwtService {
                 .compact();
     }
 
+    @Override
+    public String extractUserName(String jwt) {
+        return extractAllClaims(jwt).getSubject();
+    }
+
+    @Override
+    public Boolean isTokenActive(String jwt) {
+        Date expirationDate = extractAllClaims(jwt).getExpiration();
+        return expirationDate.after(new Date());
+    }
+
     private Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(jwtServiceProperties.getSecretKey());
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
+    private Claims extractAllClaims(String jwt) {
+        return Jwts.parser()
+                .setSigningKey(getSignInKey())
+                .build()
+                .parseClaimsJws(jwt)
+                .getBody();
+    }
 
 }
