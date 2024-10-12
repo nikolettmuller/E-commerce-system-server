@@ -1,4 +1,4 @@
-package eu.muller.nikolett.e_commerce_system.e_commerce_system_server.service;
+package eu.muller.nikolett.e_commerce_system.e_commerce_system_server.service.impl;
 
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.LoginRequest;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.LoginResponse;
@@ -9,6 +9,8 @@ import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.exception.D
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.exception.UserNotFoundException;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.mapper.RegisterMapper;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.repository.UserRepository;
+import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.service.AuthService;
+import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

@@ -7,7 +7,7 @@ import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity.User
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.exception.DuplicatedEmailException;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.mapper.RegisterMapper;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.repository.UserRepository;
-import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.service.AuthServiceImpl;
+import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.service.impl.AuthServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

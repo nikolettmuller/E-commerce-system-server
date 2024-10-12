@@ -1,4 +1,4 @@
-package eu.muller.nikolett.e_commerce_system.e_commerce_system_server.service;
+package eu.muller.nikolett.e_commerce_system.e_commerce_system_server.service.impl;
 
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.ProductRequest;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.ProductResponse;
@@ -6,6 +6,7 @@ import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity.Prod
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.exception.ProductNotFoundException;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.mapper.ProductMapper;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.repository.ProductRepository;
+import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.service.ProductService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

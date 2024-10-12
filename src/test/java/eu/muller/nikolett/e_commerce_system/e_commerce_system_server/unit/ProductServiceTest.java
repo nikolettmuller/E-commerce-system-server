@@ -7,7 +7,7 @@ import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity.Prod
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.exception.ProductNotFoundException;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.mapper.ProductMapper;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.repository.ProductRepository;
-import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.service.ProductServiceImpl;
+import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.service.impl.ProductServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

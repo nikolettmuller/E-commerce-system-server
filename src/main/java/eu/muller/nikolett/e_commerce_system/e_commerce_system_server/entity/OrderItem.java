@@ -1,10 +1,11 @@
 package eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "order_items")
 public class OrderItem {
 
