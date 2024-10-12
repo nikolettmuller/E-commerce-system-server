@@ -1,6 +1,7 @@
 package eu.muller.nikolett.e_commerce_system.e_commerce_system_server.config;
 
 
+import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity.UserRole;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -38,6 +39,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
                         .requestMatchers("/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/users/{id}").access(userSecurity)
+                        .requestMatchers("/product/**").hasAnyAuthority(UserRole.ADMIN.toString())
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

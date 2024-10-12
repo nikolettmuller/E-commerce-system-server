@@ -9,6 +9,7 @@ import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.Registe
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity.UserRole;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.exception.DuplicatedEmailException;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.repository.UserRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.util.StringUtils;
@@ -35,7 +36,7 @@ class AuthControllerTest {
 
     private static final String USER_PASSWORD = "password123";
 
-    @BeforeEach
+    @AfterEach
     public void clearRecord() {
         userRepository.deleteAll();
     }
