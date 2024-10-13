@@ -18,4 +18,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleProductNotFoundException() {
         return new ResponseEntity<>("Product does not exist", HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(OrderNotFoundException.class)
+    public ResponseEntity<String> handleOrderNotFoundException() {
+        return new ResponseEntity<>("Order does not exist", HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<String> handleUserNotFoundException() {
+        return new ResponseEntity<>("User does not exist", HttpStatus.BAD_REQUEST);
+    }
 }

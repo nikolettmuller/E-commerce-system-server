@@ -1,13 +1,11 @@
 package eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -26,7 +24,7 @@ public class Order {
 
     private Timestamp createdAt;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<OrderItem> orderItems;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private Set<OrderItem> orderItems = new HashSet<>();
 
 }

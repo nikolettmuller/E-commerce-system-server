@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 
 @Component
 @RequiredArgsConstructor
-public class UserSecurity implements AuthorizationManager<RequestAuthorizationContext> {
+public class UserOrAdminSecurity implements AuthorizationManager<RequestAuthorizationContext> {
 
     private final UserRepository userRepository;
 

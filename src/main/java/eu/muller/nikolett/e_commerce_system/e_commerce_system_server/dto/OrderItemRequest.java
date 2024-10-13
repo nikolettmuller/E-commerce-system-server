@@ -18,7 +18,4 @@ public class OrderItemRequest {
     @Schema(name = "quantity", example = "3")
     private Integer quantity;
 
-    @NotNull(message = "Price is required")
-    @Schema(name = "price", example = "2500")
-    private Integer price;
 }

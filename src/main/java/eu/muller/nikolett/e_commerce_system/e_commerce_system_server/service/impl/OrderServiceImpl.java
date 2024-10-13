@@ -1,24 +1,25 @@
 package eu.muller.nikolett.e_commerce_system.e_commerce_system_server.service.impl;
 
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.OrderItemRequest;
+import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.OrderItemResponse;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.OrderRequest;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.OrderResponse;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity.Order;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity.OrderItem;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity.Product;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity.User;
+import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.exception.OrderNotFoundException;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.exception.ProductNotFoundException;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.exception.UserNotFoundException;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.mapper.OrderMapper;
+import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.repository.OrderRepository;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.repository.ProductRepository;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.repository.UserRepository;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,7 +32,11 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderMapper orderMapper;
 
+    private final OrderRepository orderRepository;
+
     private static final String USER_NOT_FOUND = "User not found: %s.";
+
+    private static final String ORDER_NOT_FOUND = "Order not found: %s.";
 
     @Override
     public void addOrder(OrderRequest orderRequest) {
@@ -43,6 +48,24 @@ public class OrderServiceImpl implements OrderService {
 
         user.getOrders().add(order);
         userRepository.save(user);
+    }
+
+    @Override
+    public OrderResponse findOrderById(Integer id) {
+        Order order = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(String.format(ORDER_NOT_FOUND, id)));
+
+        Set<OrderItemResponse> orderItemResponse = order.getOrderItems().stream()
+                .map(orderItem -> orderMapper.map(orderItem, order, orderItem.getProduct()))
+                .collect(Collectors.toSet());
+
+       return orderMapper.map(order, order.getUser(), orderItemResponse);
+    }
+
+    @Override
+    public List<OrderResponse> findOrderByUserId(Integer id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(String.format(USER_NOT_FOUND, id)));
+        Set<Order> orders = user.getOrders();
+        return orders.stream().map(order -> findOrderById(order.getId().intValue())).toList();
     }
 
     private User findUserById(Integer userId) {
@@ -65,15 +88,5 @@ public class OrderServiceImpl implements OrderService {
     private Product findProductById(Integer productId) {
         return productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found"));
-    }
-
-    @Override
-    public OrderResponse findOrderById(Integer id) {
-        return null;
-    }
-
-    @Override
-    public Collection<OrderResponse> findOrderByUserId(Integer id) {
-        return List.of();
     }
 }

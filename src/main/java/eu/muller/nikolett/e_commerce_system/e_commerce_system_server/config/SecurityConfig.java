@@ -29,7 +29,9 @@ public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
 
-    private final UserSecurity userSecurity;
+    private final UserOrAdminSecurity userOrAdminSecurity;
+
+    private final ProductOwnerOrAdminSecurity productOwnerOrAdminSecurity;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -38,8 +40,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/users").permitAll()
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
                         .requestMatchers("/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/users/{id}").access(userSecurity)
-                        .requestMatchers("/product/**").hasAnyAuthority(UserRole.ADMIN.toString())
+                        .requestMatchers(HttpMethod.GET, "/users/{id}").access(userOrAdminSecurity)
+                        .requestMatchers("/products/**").hasAnyAuthority(UserRole.ADMIN.toString())
+                        .requestMatchers(HttpMethod.GET, "/orders/user/{id}").access(userOrAdminSecurity)
+                        .requestMatchers(HttpMethod.GET, "/orders/{id}").access(productOwnerOrAdminSecurity)
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
