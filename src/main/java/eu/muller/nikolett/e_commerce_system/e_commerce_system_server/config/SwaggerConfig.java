@@ -19,7 +19,10 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .info(new Info().title("E-commerce system server APIs")
                         .description("This is an e-commerce system web application's backend side. " +
-                                "It has user management with registration and login.")
+                                "It has user management with registration and login." +
+                                "Admin can manage the products, such as add, update or delete items. " +
+                                "For users placing an order and checking their own orders also an " +
+                                "available function. Users can also see their own details.")
                         .version("v0.0.1"))
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
                 .components(

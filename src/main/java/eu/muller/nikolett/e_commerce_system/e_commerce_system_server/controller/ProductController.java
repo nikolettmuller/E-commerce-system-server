@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "Product", description = "Product management related APIs")
@@ -29,6 +31,7 @@ public class ProductController {
                             @ApiResponse(responseCode = "400", description = "bad request")})
     @PostMapping("/products")
     public ResponseEntity<ProductResponse> addProduct(@Validated @RequestBody ProductRequest productRequest) {
+        log.info("Add product: {}", productRequest);
         return ResponseEntity.ok(productService.addProduct(productRequest));
     }
 
@@ -37,6 +40,7 @@ public class ProductController {
             @ApiResponse(responseCode = "400", description = "bad request")})
     @GetMapping("/products/{id}")
     public ResponseEntity<ProductResponse> findProductById(@Parameter(description = "Product Id") @PathVariable(name = "id") Integer id) {
+        log.info("Find product by id: {}", id);
         return ResponseEntity.ok(productService.findProductById(id));
     }
 
@@ -45,6 +49,7 @@ public class ProductController {
             @ApiResponse(responseCode = "400", description = "bad request")})
     @GetMapping("/products")
     public ResponseEntity<List<ProductResponse>> findProducts() {
+        log.info("List all products");
         return ResponseEntity.ok(productService.findProducts());
     }
 
@@ -54,6 +59,7 @@ public class ProductController {
     @PutMapping("/products/{id}")
     public ResponseEntity<ProductResponse> modifyProduct(@Parameter(description = "Product Id") @PathVariable(name = "id") Integer id,
                                                                @Validated @RequestBody ProductRequest productRequest) {
+        log.info("Modify product with id: {}, details: {}", id, productRequest);
         return ResponseEntity.ok(productService.modifyProduct(id, productRequest));
     }
 
@@ -62,6 +68,7 @@ public class ProductController {
             @ApiResponse(responseCode = "400", description = "bad request")})
     @DeleteMapping("/products/{id}")
     public ResponseEntity<Void> deleteProductById(@Parameter(description = "Product Id") @PathVariable(name = "id") Integer id) {
+        log.info("Delete product with id: {}", id);
         productService.deleteProduct(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

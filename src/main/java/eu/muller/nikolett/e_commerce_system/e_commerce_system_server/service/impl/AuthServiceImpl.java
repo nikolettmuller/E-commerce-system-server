@@ -11,12 +11,15 @@ import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.mapper.Regi
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.repository.UserRepository;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.service.AuthService;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.service.JwtService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -34,11 +37,13 @@ public class AuthServiceImpl implements AuthService {
     private static final String USER_NOT_FOUND = "User with %s email not found.";
 
     @Override
+    @Transactional
     public RegisterResponse register(RegisterRequest register) {
         checkDuplicatedEmail(register);
         hashPassword(register);
         User mappedUser = registerMapper.map(register);
         User newUser = userRepository.save(mappedUser);
+        log.info("User registered: {}", newUser.getEmail());
         return new RegisterResponse(newUser.getName());
     }
 
@@ -53,7 +58,7 @@ public class AuthServiceImpl implements AuthService {
                 .orElseThrow(() -> new UserNotFoundException(String.format(USER_NOT_FOUND, login.getEmail())));
 
         String jwt = jwtService.generateToken(user);
-
+        log.info("User logged in: {}", login.getEmail());
         return new LoginResponse(jwt);
     }
 
@@ -64,6 +69,7 @@ public class AuthServiceImpl implements AuthService {
 
     private void checkDuplicatedEmail(RegisterRequest register) {
         if (userRepository.countByEmail(register.getEmail()) > 0) {
+            log.warn("Duplicate email found: {}", register.getEmail());
             throw new DuplicatedEmailException();
         }
     }

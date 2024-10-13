@@ -7,11 +7,13 @@ import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.mapper.User
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.repository.UserRepository;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -35,7 +37,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse findUserById(Integer id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(String.format(USER_NOT_FOUND, id)));
+        User user = userRepository.findById(id).orElseThrow(() -> {
+            log.error("User not found: {}", id);
+            return new UserNotFoundException(String.format(USER_NOT_FOUND, id));
+        });
+        log.info("User found: {}", user.getEmail());
         return userMapper.map(user);
     }
 }

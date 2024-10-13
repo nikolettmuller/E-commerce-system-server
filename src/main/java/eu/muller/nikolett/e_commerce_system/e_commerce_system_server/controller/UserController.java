@@ -8,11 +8,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "User info", description = "User information related API")
@@ -26,6 +28,7 @@ public class UserController {
                             @ApiResponse(responseCode = "403", description = "forbidden request")})
     @GetMapping("/users/{id}")
     public ResponseEntity<UserResponse> findUser(@Parameter(description = "User id") @PathVariable Integer id) {
+        log.info("Fetch user information for user id: {}", id);
         return ResponseEntity.ok(userService.findUserById(id));
     }
 }
