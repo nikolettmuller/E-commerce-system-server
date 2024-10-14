@@ -23,7 +23,7 @@ public class UserOrAdminSecurity implements AuthorizationManager<RequestAuthoriz
     @Override
     public AuthorizationDecision check(Supplier authenticationSupplier, RequestAuthorizationContext ctx) {
         Long userId = Long.parseLong(ctx.getVariables().get("id"));
-        Authentication authentication = (Authentication) authenticationSupplier.get();
+        var authentication = (Authentication) authenticationSupplier.get();
         return new AuthorizationDecision(hasUserId(authentication, userId));
     }
     public boolean hasUserId(Authentication authentication, Long userId) {
@@ -36,7 +36,7 @@ public class UserOrAdminSecurity implements AuthorizationManager<RequestAuthoriz
     }
 
     private boolean isOwnResource(Authentication authentication, Long userId) {
-        Optional<User> userOptional = userRepository.findByEmail(authentication.getName());
+        var userOptional = userRepository.findByEmail(authentication.getName());
         return userOptional.filter(user -> Objects.equals(Long.valueOf(user.getId()), userId)).isPresent();
     }
 

@@ -37,12 +37,12 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public Boolean isTokenActive(String jwt) {
-        Date expirationDate = extractAllClaims(jwt).getExpiration();
+        var expirationDate = extractAllClaims(jwt).getExpiration();
         return expirationDate.after(new Date());
     }
 
     private Key getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(jwtServiceProperties.getSecretKey());
+        var keyBytes = Decoders.BASE64.decode(jwtServiceProperties.getSecretKey());
         return Keys.hmacShaKeyFor(keyBytes);
     }
 

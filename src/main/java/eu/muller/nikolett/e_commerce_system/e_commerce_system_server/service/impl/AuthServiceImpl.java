@@ -41,8 +41,8 @@ public class AuthServiceImpl implements AuthService {
     public RegisterResponse register(RegisterRequest register) {
         checkDuplicatedEmail(register);
         hashPassword(register);
-        User mappedUser = registerMapper.map(register);
-        User newUser = userRepository.save(mappedUser);
+        var mappedUser = registerMapper.map(register);
+        var newUser = userRepository.save(mappedUser);
         log.info("User registered: {}", newUser.getEmail());
         return new RegisterResponse(newUser.getName());
     }
@@ -54,16 +54,16 @@ public class AuthServiceImpl implements AuthService {
                 login.getPassword()
         ));
 
-        User user = userRepository.findByEmail(login.getEmail())
+        var user = userRepository.findByEmail(login.getEmail())
                 .orElseThrow(() -> new UserNotFoundException(String.format(USER_NOT_FOUND, login.getEmail())));
 
-        String jwt = jwtService.generateToken(user);
+        var jwt = jwtService.generateToken(user);
         log.info("User logged in: {}", login.getEmail());
         return new LoginResponse(jwt);
     }
 
     private void hashPassword(RegisterRequest register) {
-        String encodedPassword = passwordEncoder.encode(register.getPassword());
+        var encodedPassword = passwordEncoder.encode(register.getPassword());
         register.setPassword(encodedPassword);
     }
 

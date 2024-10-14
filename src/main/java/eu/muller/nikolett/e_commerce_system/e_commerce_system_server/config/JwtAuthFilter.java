@@ -29,15 +29,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        String authHeader = request.getHeader("Authorization");
+        var authHeader = request.getHeader("Authorization");
 
         if (isInvalidAuthHeader(authHeader)) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        String jwt = extractJwt(authHeader);
-        String email = jwtService.extractUserName(jwt);
+        var jwt = extractJwt(authHeader);
+        var email = jwtService.extractUserName(jwt);
 
         if (isValidUser(email) && isAuthenticationRequired()) {
             authenticateUser(request, email, jwt);
@@ -64,14 +64,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     private void authenticateUser(HttpServletRequest request, String email, String jwt) {
         if (jwtService.isTokenActive(jwt)) {
-            UserDetails userDetails = userService.userDetailsService().loadUserByUsername(email);
-            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+            var userDetails = userService.userDetailsService().loadUserByUsername(email);
+            var token = new UsernamePasswordAuthenticationToken(
                     userDetails,
                     null,
                     userDetails.getAuthorities()
             );
             token.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+            var securityContext = SecurityContextHolder.createEmptyContext();
             securityContext.setAuthentication(token);
             SecurityContextHolder.setContext(securityContext);
         }

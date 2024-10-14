@@ -40,10 +40,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void addOrder(OrderRequest orderRequest) {
-        User user = findUserById(orderRequest.getUserId());
-        Order order = orderMapper.createOrderForUser(user);
+        var user = findUserById(orderRequest.getUserId());
+        var order = orderMapper.createOrderForUser(user);
 
-        Set<OrderItem> orderItems = createOrderItems(orderRequest.getOrderItemRequests(), order);
+        var orderItems = createOrderItems(orderRequest.getOrderItemRequests(), order);
         order.setOrderItems(orderItems);
 
         user.getOrders().add(order);
@@ -52,9 +52,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponse findOrderById(Integer id) {
-        Order order = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(String.format(ORDER_NOT_FOUND, id)));
+        var order = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(String.format(ORDER_NOT_FOUND, id)));
 
-        Set<OrderItemResponse> orderItemResponse = order.getOrderItems().stream()
+        var orderItemResponse = order.getOrderItems().stream()
                 .map(orderItem -> orderMapper.map(orderItem, order, orderItem.getProduct()))
                 .collect(Collectors.toSet());
 
@@ -63,8 +63,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderResponse> findOrderByUserId(Integer id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(String.format(USER_NOT_FOUND, id)));
-        Set<Order> orders = user.getOrders();
+        var user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(String.format(USER_NOT_FOUND, id)));
+        var orders = user.getOrders();
         return orders.stream().map(order -> findOrderById(order.getId().intValue())).toList();
     }
 
@@ -81,7 +81,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private OrderItem createOrderItem(OrderItemRequest orderItemRequest, Order order) {
-        Product product = findProductById(orderItemRequest.getProductId());
+        var product = findProductById(orderItemRequest.getProductId());
         return orderMapper.createOrderItemForProduct(orderItemRequest, order, product);
     }
 

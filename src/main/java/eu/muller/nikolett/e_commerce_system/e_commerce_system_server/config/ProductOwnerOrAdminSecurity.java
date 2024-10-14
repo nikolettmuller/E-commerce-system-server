@@ -23,7 +23,7 @@ public class ProductOwnerOrAdminSecurity implements AuthorizationManager<Request
     @Override
     public AuthorizationDecision check(Supplier authenticationSupplier, RequestAuthorizationContext ctx) {
         Long orderId = Long.parseLong(ctx.getVariables().get("id"));
-        Authentication authentication = (Authentication) authenticationSupplier.get();
+        var authentication = (Authentication) authenticationSupplier.get();
         return new AuthorizationDecision(hasUserId(authentication, orderId));
     }
     public boolean hasUserId(Authentication authentication, Long orderId) {
@@ -36,7 +36,7 @@ public class ProductOwnerOrAdminSecurity implements AuthorizationManager<Request
     }
 
     private boolean isOwnOrder(Authentication authentication, Long orderId) {
-        Optional<User> userOptional = userRepository.findByEmail(authentication.getName());
+        var userOptional = userRepository.findByEmail(authentication.getName());
         if (userOptional.isEmpty() || userOptional.get().getOrders() == null) {
             return false;
         } else {

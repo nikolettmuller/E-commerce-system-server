@@ -28,7 +28,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public ProductResponse addProduct(ProductRequest productRequest) {
-        Product product = productRepository.save(productMapper.map(productRequest));
+        var product = productRepository.save(productMapper.map(productRequest));
         log.info("Product added: {}", product.getId());
         return productMapper.map(product);
     }
@@ -36,7 +36,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public ProductResponse findProductById(Integer id) {
-        Product product = productRepository.findById(id).orElseThrow(() ->
+        var product = productRepository.findById(id).orElseThrow(() ->
         {
             log.error("Product not found: {}", id);
             return new ProductNotFoundException(String.format(PRODUCT_NOT_FOUND, id));
@@ -48,7 +48,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public List<ProductResponse> findProducts() {
-        List<ProductResponse> productResponses = productRepository.findAll().stream().map(productMapper::map).toList();
+        var productResponses = productRepository.findAll().stream().map(productMapper::map).toList();
         log.info("Retrieved {} products", productResponses.size());
         return productResponses;
     }
@@ -56,7 +56,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public ProductResponse modifyProduct(Integer id, ProductRequest productRequest) {
-        Product product = productRepository.findById(id).orElseThrow(() ->
+        var product = productRepository.findById(id).orElseThrow(() ->
         {
             log.error("Product not found for modification: {}", id);
             return new ProductNotFoundException(String.format(PRODUCT_NOT_FOUND, id));

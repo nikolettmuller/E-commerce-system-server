@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse findUserById(Integer id) {
-        User user = userRepository.findById(id).orElseThrow(() -> {
+        var user = userRepository.findById(id).orElseThrow(() -> {
             log.error("User not found: {}", id);
             return new UserNotFoundException(String.format(USER_NOT_FOUND, id));
         });

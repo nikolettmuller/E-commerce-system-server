@@ -15,7 +15,7 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI customOpenAPI() {
-        final String securitySchemeName = "bearerAuth";
+        final var securitySchemeName = "bearerAuth";
         return new OpenAPI()
                 .info(new Info().title("E-commerce system server APIs")
                         .description("This is an e-commerce system web application's backend side. " +
