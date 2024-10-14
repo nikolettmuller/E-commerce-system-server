@@ -1,7 +1,5 @@
 package eu.muller.nikolett.e_commerce_system.e_commerce_system_server.unit;
 
-import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.RegisterRequest;
-import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.UserResponse;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity.User;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity.UserRole;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.mapper.UserMapper;
@@ -24,9 +22,9 @@ class UserMapperTest {
 
     @Test
     void userMapperTest() {
-        User user = createUser(1, USER_NAME, UserRole.USER, USER_EMAIL, USER_PASSWORD);
+        var user = createUser(1, USER_NAME, UserRole.USER, USER_EMAIL, USER_PASSWORD);
 
-        UserResponse mappedUserResponse = userMapper.map(user);
+        var mappedUserResponse = userMapper.map(user);
 
         Assertions.assertAll(
                 () -> Assertions.assertEquals(user.getName(), mappedUserResponse.getName()),
@@ -37,7 +35,7 @@ class UserMapperTest {
     }
 
     private User createUser(Integer id, String name, UserRole role, String email, String password) {
-        User user = new User();
+        var user = new User();
         user.setId(id);
         user.setName(name);
         user.setRole(role);

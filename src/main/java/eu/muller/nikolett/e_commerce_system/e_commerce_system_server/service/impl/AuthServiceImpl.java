@@ -4,7 +4,6 @@ import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.LoginRe
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.LoginResponse;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.RegisterRequest;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.RegisterResponse;
-import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity.User;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.exception.DuplicatedEmailException;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.exception.UserNotFoundException;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.mapper.RegisterMapper;

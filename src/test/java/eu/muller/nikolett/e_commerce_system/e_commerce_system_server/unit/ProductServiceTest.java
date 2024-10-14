@@ -44,15 +44,15 @@ class ProductServiceTest {
 
     @Test
     void validAddProductTest() {
-        ProductRequest request = createProductRequest(PRODUCT_NAME, PRODUCT_DESC, PRODUCT_PRICE);
-        Product product = createProduct(PRODUCT_ID, PRODUCT_NAME,PRODUCT_DESC, PRODUCT_PRICE);
-        ProductResponse response = createProductResponse(PRODUCT_ID, PRODUCT_NAME, PRODUCT_DESC, PRODUCT_PRICE, product.getCreatedAt());
+        var request = createProductRequest(PRODUCT_NAME, PRODUCT_DESC, PRODUCT_PRICE);
+        var product = createProduct(PRODUCT_ID, PRODUCT_NAME,PRODUCT_DESC, PRODUCT_PRICE);
+        var response = createProductResponse(PRODUCT_ID, PRODUCT_NAME, PRODUCT_DESC, PRODUCT_PRICE, product.getCreatedAt());
 
         doReturn(product).when(productMapper).map(request);
         doReturn(product).when(productRepository).save(product);
         doReturn(response).when(productMapper).map(product);
 
-        ProductResponse productResponse = productService.addProduct(request);
+        var productResponse = productService.addProduct(request);
 
         assertAll(
                 () -> assertEquals(PRODUCT_NAME, productResponse.getName()),
@@ -64,14 +64,14 @@ class ProductServiceTest {
 
     @Test
     void findProductByValidIdTest() {
-        Optional<Product> product = Optional.of(createProduct(PRODUCT_ID, PRODUCT_NAME, PRODUCT_DESC, PRODUCT_PRICE));
-        ProductResponse response = createProductResponse(PRODUCT_ID, PRODUCT_NAME, PRODUCT_DESC, PRODUCT_PRICE, product.get().getCreatedAt());
-        int id = 1;
+        var product = Optional.of(createProduct(PRODUCT_ID, PRODUCT_NAME, PRODUCT_DESC, PRODUCT_PRICE));
+        var response = createProductResponse(PRODUCT_ID, PRODUCT_NAME, PRODUCT_DESC, PRODUCT_PRICE, product.get().getCreatedAt());
+        var id = 1;
 
         doReturn(product).when(productRepository).findById(id);
         doReturn(response).when(productMapper).map(product.get());
 
-        ProductResponse productResponse = productService.findProductById(id);
+        var productResponse = productService.findProductById(id);
 
         assertAll(
                 () -> assertEquals(PRODUCT_NAME, productResponse.getName()),
@@ -83,7 +83,7 @@ class ProductServiceTest {
 
     @Test
     void findProductByInValidIdTest() {
-        int id = 1;
+        var id = 1;
         doReturn(Optional.empty()).when(productRepository).findById(id);
         assertThrows(ProductNotFoundException.class, () -> productService.findProductById(id));
 
@@ -91,15 +91,15 @@ class ProductServiceTest {
 
     @Test
     void modifyProductTest() {
-        ProductRequest request = createProductRequest("modifiedName", PRODUCT_DESC, PRODUCT_PRICE);
-        Optional<Product> product = Optional.of(createProduct(PRODUCT_ID, "modifiedName", PRODUCT_DESC, PRODUCT_PRICE));
-        ProductResponse response = createProductResponse(PRODUCT_ID, "modifiedName", PRODUCT_DESC, PRODUCT_PRICE, product.get().getCreatedAt());
+        var request = createProductRequest("modifiedName", PRODUCT_DESC, PRODUCT_PRICE);
+        var product = Optional.of(createProduct(PRODUCT_ID, "modifiedName", PRODUCT_DESC, PRODUCT_PRICE));
+        var response = createProductResponse(PRODUCT_ID, "modifiedName", PRODUCT_DESC, PRODUCT_PRICE, product.get().getCreatedAt());
 
         doReturn(product).when(productRepository).findById(PRODUCT_ID);
         doReturn(response).when(productMapper).map(product.get());
         doReturn(product.get()).when(productRepository).save(product.get());
 
-        ProductResponse productResponse = productService.modifyProduct(PRODUCT_ID, request);
+        var productResponse = productService.modifyProduct(PRODUCT_ID, request);
 
         assertAll(
                 () -> assertEquals("modifiedName", productResponse.getName()),
@@ -112,7 +112,7 @@ class ProductServiceTest {
 
     @Test
     void deleteTest() {
-        int id = 1;
+        var id = 1;
         doNothing().when(productRepository).deleteById(id);
         productService.deleteProduct(id);
         verify(productRepository, times(1)).deleteById(id);
@@ -128,7 +128,7 @@ class ProductServiceTest {
     }
 
     private Product createProduct(Integer id, String name, String description, Integer price) {
-        Product product = new Product();
+        var product = new Product();
         product.setId(id);
         product.setName(name);
         product.setDescription(description);

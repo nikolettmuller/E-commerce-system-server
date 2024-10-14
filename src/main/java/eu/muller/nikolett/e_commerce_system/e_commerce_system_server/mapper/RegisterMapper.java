@@ -10,6 +10,7 @@ import org.mapstruct.MappingConstants;
 public interface RegisterMapper {
 
 
+    @Mapping(target = "orders", ignore = true)
     @Mapping(target = "authorities", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", expression = "java(java.sql.Timestamp.valueOf(java.time.LocalDateTime.now()))")

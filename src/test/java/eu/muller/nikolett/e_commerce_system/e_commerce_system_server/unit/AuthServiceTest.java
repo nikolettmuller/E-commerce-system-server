@@ -1,7 +1,6 @@
 package eu.muller.nikolett.e_commerce_system.e_commerce_system_server.unit;
 
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.RegisterRequest;
-import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.RegisterResponse;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity.User;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity.UserRole;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.exception.DuplicatedEmailException;
@@ -45,25 +44,25 @@ class AuthServiceTest {
 
     @Test
     void validRegisterTest() {
-        RegisterRequest registerRequest =
+        var registerRequest =
                 createRegisterRequest(USER_NAME, USER_EMAIL,
                         USER_PASSWORD, UserRole.USER);
 
-        User mappedUser = createMappedUser(1, registerRequest.getName(), registerRequest.getRole(), registerRequest.getEmail());
+        var mappedUser = createMappedUser(1, registerRequest.getName(), registerRequest.getRole(), registerRequest.getEmail());
 
         doReturn(0L).when(userRepository).countByEmail(registerRequest.getEmail());
         doReturn("encryptedPass").when(passwordEncoder).encode(registerRequest.getPassword());
         doReturn(mappedUser).when(registerMapper).map(registerRequest);
         doReturn(mappedUser).when(userRepository).save(mappedUser);
 
-        RegisterResponse registerResponse = authService.register(registerRequest);
+        var registerResponse = authService.register(registerRequest);
 
         Assertions.assertEquals(USER_NAME, registerResponse.getName());
     }
 
     @Test
     void duplicatedEmailTest() {
-        RegisterRequest registerRequest =
+        var registerRequest =
                 createRegisterRequest(USER_NAME, USER_EMAIL,
                         USER_PASSWORD, UserRole.USER);
 
@@ -82,7 +81,7 @@ class AuthServiceTest {
     }
 
     private User createMappedUser(Integer id, String name, UserRole role, String email) {
-        User mappedUser = new User();
+        var mappedUser = new User();
         mappedUser.setId(id);
         mappedUser.setName(name);
         mappedUser.setRole(role);

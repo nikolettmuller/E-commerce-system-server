@@ -1,22 +1,17 @@
 package eu.muller.nikolett.e_commerce_system.e_commerce_system_server.integration;
 
-
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.controller.AuthController;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.LoginRequest;
-import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.LoginResponse;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.RegisterRequest;
-import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.RegisterResponse;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity.UserRole;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.exception.DuplicatedEmailException;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,11 +38,11 @@ class AuthControllerTest {
 
     @Test
     void validRegistrationTest() {
-        RegisterRequest registerRequest =
+        var registerRequest =
                 createRegisterRequest(USER_NAME, USER_EMAIL,
                         USER_PASSWORD, UserRole.USER);
 
-        ResponseEntity<RegisterResponse> response = authController.register(registerRequest);
+        var response = authController.register(registerRequest);
 
         assertAll(
                 () -> assertEquals(HttpStatus.OK, response.getStatusCode()),
@@ -59,13 +54,13 @@ class AuthControllerTest {
 
     @Test
     void notUniqueEmailRegistrationTest() {
-        RegisterRequest registerRequest =
+        var registerRequest =
                 createRegisterRequest(USER_NAME, USER_EMAIL,
                         USER_PASSWORD, UserRole.USER);
 
         authController.register(registerRequest);
 
-        RegisterRequest registerRequestOther = createRegisterRequest("User Name", USER_EMAIL,
+        var registerRequestOther = createRegisterRequest("User Name", USER_EMAIL,
                 "pass987", UserRole.USER);
 
 
@@ -73,26 +68,16 @@ class AuthControllerTest {
     }
 
     @Test
-    void invalidEmailRegistrationTest() {
-       // TODO
-    }
-
-    @Test
-    void nullAttributesRegistrationTest() {
-        // TODO
-    }
-
-    @Test
     void validLoginTest() {
-        RegisterRequest registerRequest =
+        var registerRequest =
                 createRegisterRequest(USER_NAME, USER_EMAIL,
                         USER_PASSWORD, UserRole.USER);
 
         authController.register(registerRequest);
 
-        LoginRequest loginRequest = createLoginRequest(USER_EMAIL, USER_PASSWORD);
+        var loginRequest = createLoginRequest(USER_EMAIL, USER_PASSWORD);
 
-        ResponseEntity<LoginResponse> response = authController.login(loginRequest);
+        var response = authController.login(loginRequest);
 
         assertAll(
                 () -> assertEquals(HttpStatus.OK, response.getStatusCode()),
@@ -104,13 +89,13 @@ class AuthControllerTest {
 
     @Test
     void invalidPasswordLoginTest() {
-        RegisterRequest registerRequest =
+        var registerRequest =
                 createRegisterRequest(USER_NAME, USER_EMAIL,
                         USER_PASSWORD, UserRole.USER);
 
         authController.register(registerRequest);
 
-        LoginRequest loginRequest = createLoginRequest(USER_EMAIL, "password1234");
+        var loginRequest = createLoginRequest(USER_EMAIL, "password1234");
 
         assertThrows(BadCredentialsException.class, () -> authController.login(loginRequest));
 

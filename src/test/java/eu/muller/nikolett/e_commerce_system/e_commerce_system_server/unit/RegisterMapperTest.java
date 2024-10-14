@@ -1,7 +1,6 @@
 package eu.muller.nikolett.e_commerce_system.e_commerce_system_server.unit;
 
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.RegisterRequest;
-import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity.User;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity.UserRole;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.mapper.RegisterMapper;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.mapper.RegisterMapperImpl;
@@ -15,14 +14,14 @@ class RegisterMapperTest {
 
     @Test
     void registerMapperTest() {
-        RegisterRequest registerRequest = RegisterRequest.builder()
+        var registerRequest = RegisterRequest.builder()
                 .name("Test User")
                 .email("testuser@testuser.com")
                 .password("password123")
                 .role(UserRole.USER)
                 .build();
 
-        User mappedUser = registerMapper.map(registerRequest);
+        var mappedUser = registerMapper.map(registerRequest);
 
         Assertions.assertAll(
                 () -> Assertions.assertEquals(registerRequest.getName(), mappedUser.getName()),

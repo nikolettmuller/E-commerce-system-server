@@ -1,9 +1,7 @@
 package eu.muller.nikolett.e_commerce_system.e_commerce_system_server.integration;
 
-
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.controller.ProductController;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.ProductRequest;
-import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.ProductResponse;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity.Product;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.exception.ProductNotFoundException;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.mapper.ProductMapper;
@@ -14,11 +12,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -48,9 +44,9 @@ class ProductControllerTest {
 
     @Test
     void validAddProductTest() {
-        ProductRequest request = createProductRequest("Product name", "Product description", 1000);
+        var request = createProductRequest("Product name", "Product description", 1000);
 
-        ResponseEntity<ProductResponse> response = productController.addProduct(request);
+        var response = productController.addProduct(request);
 
         assertAll(
                 () -> assertEquals(HttpStatus.OK, response.getStatusCode()),
@@ -62,7 +58,7 @@ class ProductControllerTest {
     @Test
     void listProductTest() {
 
-        ResponseEntity<List<ProductResponse>> response = productController.findProducts();
+        var response = productController.findProducts();
 
         assertAll(
                 () -> assertEquals(HttpStatus.OK, response.getStatusCode()),
@@ -74,7 +70,7 @@ class ProductControllerTest {
     @Test
     void findProductByValidIdTest() {
         int validProductId = productRepository.findAll().get(0).getId();
-        ResponseEntity<ProductResponse> response = productController.findProductById(validProductId);
+        var response = productController.findProductById(validProductId);
 
         assertAll(
                 () -> assertEquals(HttpStatus.OK, response.getStatusCode()),
@@ -84,19 +80,19 @@ class ProductControllerTest {
 
     @Test
     void findProductByInvalidIdTest() {
-        int invalidProductId = -1;
+        var invalidProductId = -1;
         assertThrows(ProductNotFoundException.class, () -> productController.findProductById(invalidProductId));
     }
 
     @Test
     void modifyProductTest() {
         int productId = productRepository.findAll().get(0).getId();
-        ProductRequest productRequest = ProductRequest.builder()
+        var productRequest = ProductRequest.builder()
                 .price(1001)
                 .description("modfiedDesc")
                 .name("modifiedName")
                 .build();
-        ResponseEntity<ProductResponse> response = productController.modifyProduct(productId, productRequest);
+        var response = productController.modifyProduct(productId, productRequest);
 
         assertAll(
                 () -> assertEquals(HttpStatus.OK, response.getStatusCode()),
@@ -124,7 +120,7 @@ class ProductControllerTest {
     }
 
     private Product createProduct(String name, String description, Integer price) {
-        Product product = new Product();
+        var product = new Product();
         product.setName(name);
         product.setDescription(description);
         product.setPrice(price);

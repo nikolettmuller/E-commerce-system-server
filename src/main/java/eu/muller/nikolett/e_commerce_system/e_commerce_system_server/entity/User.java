@@ -1,8 +1,6 @@
 package eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;

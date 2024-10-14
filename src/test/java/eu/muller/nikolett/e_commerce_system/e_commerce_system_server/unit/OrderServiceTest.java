@@ -60,13 +60,13 @@ class OrderServiceTest {
     @Test
     void validAddOrderTest() {
         Integer userId = 1;
-        Optional<User> user = Optional.of(createUser(userId, USER_NAME, UserRole.USER, USER_EMAIL, USER_PASSWORD));
-        Optional<Product> product = Optional.of(createProduct(PRODUCT_ID, PRODUCT_NAME, PRODUCT_DESC, PRODUCT_PRICE));
-        OrderItem orderItem = createOrderItems(1L, product.get(), createOrder(1L, user.get(), Set.of()), 2, 4000);
-        Order order = createOrder(1L, user.get(), Set.of(orderItem));
+        var user = Optional.of(createUser(userId, USER_NAME, UserRole.USER, USER_EMAIL, USER_PASSWORD));
+        var product = Optional.of(createProduct(PRODUCT_ID, PRODUCT_NAME, PRODUCT_DESC, PRODUCT_PRICE));
+        var orderItem = createOrderItems(1L, product.get(), createOrder(1L, user.get(), Set.of()), 2, 4000);
+        var order = createOrder(1L, user.get(), Set.of(orderItem));
 
-        OrderItemRequest orderItemRequest = createOrderItemRequest(PRODUCT_ID, 2);
-        OrderRequest orderRequest = createOrderRequest(user.get().getId(), Set.of(orderItemRequest));
+        var orderItemRequest = createOrderItemRequest(PRODUCT_ID, 2);
+        var orderRequest = createOrderRequest(user.get().getId(), Set.of(orderItemRequest));
 
         doReturn(user).when(userRepository).findById(userId);
         doReturn(order).when(orderMapper).createOrderForUser(user.get());
@@ -81,19 +81,19 @@ class OrderServiceTest {
 
     @Test
     void findOrderByIdTest() {
-        int orderId = 1;
-        User user = createUser(1, USER_NAME, UserRole.USER, USER_EMAIL, USER_PASSWORD);
-        Product product = createProduct(PRODUCT_ID, PRODUCT_NAME, PRODUCT_DESC, PRODUCT_PRICE);
-        OrderItem orderItem = createOrderItems(1L, product, createOrder(1L, user, Set.of()), 2, 4000);
-        Optional<Order> order = Optional.of(createOrder(1L, user, Set.of(orderItem)));
-        OrderItemResponse orderItemResponse = new OrderItemResponse(1, orderId, product.getId(), 10, 1000);
-        OrderResponse orderResponse = new OrderResponse(1, user.getId(), Timestamp.valueOf(LocalDateTime.now()), Set.of(orderItemResponse));
+        var orderId = 1;
+        var user = createUser(1, USER_NAME, UserRole.USER, USER_EMAIL, USER_PASSWORD);
+        var product = createProduct(PRODUCT_ID, PRODUCT_NAME, PRODUCT_DESC, PRODUCT_PRICE);
+        var orderItem = createOrderItems(1L, product, createOrder(1L, user, Set.of()), 2, 4000);
+        var order = Optional.of(createOrder(1L, user, Set.of(orderItem)));
+        var orderItemResponse = new OrderItemResponse(1, orderId, product.getId(), 10, 1000);
+        var orderResponse = new OrderResponse(1, user.getId(), Timestamp.valueOf(LocalDateTime.now()), Set.of(orderItemResponse));
 
         doReturn(order).when(orderRepository).findById(orderId);
         doReturn(orderItemResponse).when(orderMapper).map(orderItem, order.get(), product);
         doReturn(orderResponse).when(orderMapper).map(order.get(), user, Set.of(orderItemResponse));
 
-        OrderResponse response = orderService.findOrderById(orderId);
+        var response = orderService.findOrderById(orderId);
 
         verify(orderMapper, times(1)).map(order.get(), user, Set.of(orderItemResponse));
         assertEquals(orderResponse.getId(), response.getId());
@@ -101,7 +101,7 @@ class OrderServiceTest {
     }
 
     private User createUser(Integer id, String name, UserRole role, String email, String password) {
-        User user = new User();
+        var user = new User();
         user.setId(id);
         user.setName(name);
         user.setRole(role);
@@ -112,7 +112,7 @@ class OrderServiceTest {
     }
 
     private Order createOrder(Long id, User user, Set<OrderItem> orderItems) {
-        Order order = new Order();
+        var order = new Order();
         order.setId(id);
         order.setUser(user);
         order.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
@@ -121,7 +121,7 @@ class OrderServiceTest {
     }
 
     private OrderItem createOrderItems(Long id, Product product,Order order, Integer quantity, Integer price) {
-        OrderItem orderItem = new OrderItem();
+        var orderItem = new OrderItem();
         orderItem.setId(id);
         orderItem.setOrder(order);
         orderItem.setProduct(product);
@@ -131,7 +131,7 @@ class OrderServiceTest {
     }
 
     private Product createProduct(Integer id, String name, String description, Integer price) {
-        Product product = new Product();
+        var product = new Product();
         product.setId(id);
         product.setName(name);
         product.setDescription(description);

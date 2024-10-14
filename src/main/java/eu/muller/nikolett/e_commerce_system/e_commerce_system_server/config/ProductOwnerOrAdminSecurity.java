@@ -1,6 +1,5 @@
 package eu.muller.nikolett.e_commerce_system.e_commerce_system_server.config;
 
-import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity.User;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity.UserRole;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +10,6 @@ import org.springframework.security.web.access.intercept.RequestAuthorizationCon
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Supplier;
 
 @Component

@@ -7,7 +7,6 @@ import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.Registe
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.RegisterResponse;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -17,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j

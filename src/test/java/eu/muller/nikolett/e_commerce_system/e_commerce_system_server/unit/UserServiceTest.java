@@ -41,13 +41,13 @@ class UserServiceTest {
     @Test
     void validUserInfoTest() {
         Integer userId = 1;
-        Optional<User> user = Optional.of(createUser(userId, USER_NAME, UserRole.USER, USER_EMAIL, USER_PASSWORD));
-        UserResponse userResponse = createUserResponse(USER_NAME, USER_EMAIL, UserRole.USER, user.get().getCreatedAt());
+        var user = Optional.of(createUser(userId, USER_NAME, UserRole.USER, USER_EMAIL, USER_PASSWORD));
+        var userResponse = createUserResponse(USER_NAME, USER_EMAIL, UserRole.USER, user.get().getCreatedAt());
 
         doReturn(user).when(userRepository).findById(userId);
         doReturn(userResponse).when(userMapper).map(user.get());
 
-        UserResponse response = userService.findUserById(userId);
+        var response = userService.findUserById(userId);
 
         Assertions.assertEquals(USER_NAME, response.getName());
     }
@@ -61,7 +61,7 @@ class UserServiceTest {
     }
 
     private User createUser(Integer id, String name, UserRole role, String email, String password) {
-        User user = new User();
+        var user = new User();
         user.setId(id);
         user.setName(name);
         user.setRole(role);
@@ -72,7 +72,7 @@ class UserServiceTest {
     }
 
     private UserResponse createUserResponse(String name, String email, UserRole role, Timestamp createdAt) {
-        UserResponse user = UserResponse.builder()
+        var user = UserResponse.builder()
                 .name(name)
                 .email(email)
                 .role(role)

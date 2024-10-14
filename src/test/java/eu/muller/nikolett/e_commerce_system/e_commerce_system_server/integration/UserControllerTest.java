@@ -1,12 +1,8 @@
 package eu.muller.nikolett.e_commerce_system.e_commerce_system_server.integration;
 
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.controller.UserController;
-import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.LoginRequest;
-import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.RegisterRequest;
-import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.UserResponse;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity.User;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity.UserRole;
-import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.exception.DuplicatedEmailException;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.exception.UserNotFoundException;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -15,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -52,7 +47,7 @@ class UserControllerTest {
     @Test
     void validUserInfoTest() {
         int userId = userRepository.findAll().get(0).getId();
-        ResponseEntity<UserResponse> response = userController.findUser(userId);
+        var response = userController.findUser(userId);
 
         assertAll(
                 () -> assertEquals(HttpStatus.OK, response.getStatusCode()),
@@ -62,13 +57,13 @@ class UserControllerTest {
 
     @Test
     void invalidUserInfoTest() {
-        int userId = 20;
+        var userId = 20;
         assertThrows(UserNotFoundException.class, () -> userController.findUser(userId));
     }
 
 
     private User createUser(String name, UserRole role, String email, String password) {
-        User user = new User();
+        var user = new User();
         user.setName(name);
         user.setRole(role);
         user.setEmail(email);

@@ -20,6 +20,6 @@ public class OrderResponse {
     @Schema(name = "createdAt", example = "2024-10-12T14:10:05.591")
     private Timestamp createdAt;
 
-    @Schema(name = "createdAt")
+    @Schema(name = "orderItemResponses")
     private Set<OrderItemResponse> orderItemResponses;
 }

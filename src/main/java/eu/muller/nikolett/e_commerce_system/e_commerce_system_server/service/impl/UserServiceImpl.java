@@ -1,7 +1,6 @@
 package eu.muller.nikolett.e_commerce_system.e_commerce_system_server.service.impl;
 
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.UserResponse;
-import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity.User;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.exception.UserNotFoundException;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.mapper.UserMapper;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.repository.UserRepository;

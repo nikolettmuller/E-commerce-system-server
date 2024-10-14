@@ -3,7 +3,6 @@ package eu.muller.nikolett.e_commerce_system.e_commerce_system_server.integratio
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.controller.OrderController;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.OrderItemRequest;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.OrderRequest;
-import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.OrderResponse;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity.Product;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity.User;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity.UserRole;
@@ -17,11 +16,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -60,14 +57,14 @@ class OrderControllerTest {
 
     @Test
     void validPlaceOrderTest() {
-        OrderRequest orderRequest = createOrderRequest(testUser.getId(), Set.of(createOrderItemRequest(testProduct.getId(), 2)));
-        ResponseEntity<Void> response = orderController.addOrder(orderRequest);
+        var orderRequest = createOrderRequest(testUser.getId(), Set.of(createOrderItemRequest(testProduct.getId(), 2)));
+        var response = orderController.addOrder(orderRequest);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
     void validMultiplePlaceOrderTest() {
-        OrderRequest orderRequest = createOrderRequest(testUser.getId(), Set.of(createOrderItemRequest(testProduct.getId(), 2)));
+        var orderRequest = createOrderRequest(testUser.getId(), Set.of(createOrderItemRequest(testProduct.getId(), 2)));
         orderController.addOrder(orderRequest);
         orderController.addOrder(orderRequest);
         assertEquals(2, orderRepository.findAll().size());
@@ -75,11 +72,11 @@ class OrderControllerTest {
 
     @Test
     void findOrderTest() {
-        OrderRequest orderRequest = createOrderRequest(testUser.getId(), Set.of(createOrderItemRequest(testProduct.getId(), 2)));
+        var orderRequest = createOrderRequest(testUser.getId(), Set.of(createOrderItemRequest(testProduct.getId(), 2)));
         orderController.addOrder(orderRequest);
 
-        int orderId = orderRepository.findAll().get(0).getId().intValue();
-        ResponseEntity<OrderResponse> response = orderController.findOrderById(orderId);
+        var orderId = orderRepository.findAll().get(0).getId().intValue();
+        var response = orderController.findOrderById(orderId);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(testUser.getId(), response.getBody().getUserId());
@@ -92,17 +89,17 @@ class OrderControllerTest {
 
     @Test
     void findOrderByUserIdTest() {
-        OrderRequest orderRequest = createOrderRequest(testUser.getId(), Set.of(createOrderItemRequest(testProduct.getId(), 2)));
+        var orderRequest = createOrderRequest(testUser.getId(), Set.of(createOrderItemRequest(testProduct.getId(), 2)));
         orderController.addOrder(orderRequest);
 
-        ResponseEntity<List<OrderResponse>> response = orderController.findOrderByUserId(testUser.getId());
+        var response = orderController.findOrderByUserId(testUser.getId());
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(testUser.getId(), response.getBody().get(0).getUserId());
     }
 
     private User createUser(String name, String email, String password, UserRole role) {
-        User user = new User();
+        var user = new User();
         user.setName(name);
         user.setEmail(email);
         user.setPassword(password);
@@ -112,7 +109,7 @@ class OrderControllerTest {
     }
 
     private Product createProduct(String name, String description, int price) {
-        Product product = new Product();
+        var product = new Product();
         product.setName(name);
         product.setDescription(description);
         product.setPrice(price);

@@ -1,7 +1,6 @@
 package eu.muller.nikolett.e_commerce_system.e_commerce_system_server.unit;
 
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.ProductRequest;
-import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.ProductResponse;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity.Product;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.mapper.ProductMapper;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.mapper.ProductMapperImpl;
@@ -17,13 +16,13 @@ class ProductMapperTest {
 
     @Test
     void productMapperByProductRequestTest() {
-        ProductRequest request = ProductRequest.builder()
+        var request = ProductRequest.builder()
                 .name("Product name")
                 .description("Product description")
                 .price(1000)
                 .build();
 
-        Product product = productMapper.map(request);
+        var product = productMapper.map(request);
 
         Assertions.assertAll(
                 () -> Assertions.assertEquals(request.getName(), product.getName()),
@@ -36,14 +35,14 @@ class ProductMapperTest {
 
     @Test
     void productMapperByProductTest() {
-        Product product = new Product();
+        var product = new Product();
         product.setId(1);
         product.setName("Product name");
         product.setDescription("Product description");
         product.setPrice(1000);
         product.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
 
-        ProductResponse response = productMapper.map(product);
+        var response = productMapper.map(product);
 
         Assertions.assertAll(
                 () -> Assertions.assertEquals(product.getName(), response.getName()),

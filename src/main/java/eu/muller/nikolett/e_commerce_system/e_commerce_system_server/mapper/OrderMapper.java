@@ -2,7 +2,6 @@ package eu.muller.nikolett.e_commerce_system.e_commerce_system_server.mapper;
 
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.OrderItemRequest;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.OrderItemResponse;
-import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.OrderRequest;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.dto.OrderResponse;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity.Order;
 import eu.muller.nikolett.e_commerce_system.e_commerce_system_server.entity.OrderItem;
